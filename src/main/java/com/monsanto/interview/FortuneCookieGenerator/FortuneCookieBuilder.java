@@ -1,11 +1,17 @@
 package com.monsanto.interview.FortuneCookieGenerator;
 
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 @Component
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+/**
+ * Bug Fix
+ * Wrong way -> "@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)"
+ * The bean instance have to be per HTTP request
+ */
+@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class FortuneCookieBuilder {
 
     private static final String NOT_DEFINED = "N/A";
