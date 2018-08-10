@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -26,7 +24,6 @@ import com.google.gson.GsonBuilder;
 public class FortuneCookieControllerTest {
 	
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Logger LOG = LoggerFactory.getLogger(FortuneCookieControllerTest.class);
 	
 	@Autowired
 	private FortuneCookieController fortuneCookieController;
@@ -43,28 +40,20 @@ public class FortuneCookieControllerTest {
 
     @Test
 	public void message_in_return_of_generateFortuneCookie_should_be_different_for_each_client() throws Exception {
-    	LOG.info("message_in_return_of_generateFortuneCookie_should_be_different_for_each_client");
-    	String uri1 = "/generateFortuneCookie?client=Barney&company=SuperStore";
-    	String uri2 = "/generateFortuneCookie?client=Sarah&company=MegaMarket";
-    	
     	final FortuneCookie result1 = GSON
     			.fromJson(this.mockMvc
-					.perform(get(uri1))
+					.perform(get("/generateFortuneCookie?client=Barney&company=SuperStore"))
 					.andReturn()
 					.getResponse()
 					.getContentAsString(), FortuneCookie.class);
 		
     	final FortuneCookie result2 = GSON
     			.fromJson(this.mockMvc
-					.perform(get(uri2))
+					.perform(get("/generateFortuneCookie?client=Sarah&company=MegaMarket"))
 					.andReturn()
 					.getResponse()
 					.getContentAsString(), FortuneCookie.class);
 		
-    	LOG.info("uri = {}", uri1);
-    	LOG.info("message = {}", result1.getMessage());
-    	LOG.info("uri = {}",uri2);
-    	LOG.info("message = {}", result2.getMessage());
 		Assert.assertTrue(!Objects.equals(result1.getMessage(), result2.getMessage()));
 	}
 	 
